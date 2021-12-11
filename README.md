@@ -1,2 +1,1 @@
-# stohan
-Stochastic analysis 
+Stochastic analysis practic
