@@ -43,13 +43,13 @@
  случайную величину $Y \sim \Uni([0,1])$. В таком случае $X$
  можно представить в виде: $X = \Ind(Y < p)$, где $\Ind()$
  --- индикаторная функция:
-\begin{equation}
+$$
     X = \Ind(Y < p) = 
     \begin{cases}
         1 \ , & Y < p, \\
         0 \ , & Y \ge p.
     \end{cases}
-\end{equation}
+$$
 Генерация схемы Бернулли в таком случае будет происходить с помощью некоторого
  количества генераций бернуллиевской случайной величины.
 
@@ -72,6 +72,7 @@ $$ X = \sum_{i = 1}^n Y_i ,$$
 	\begin{center}
 		\includegraphics[width=0.85\linewidth]{"./resources/binominal.png"}
 		\caption{Гистограмма биномиального распределения с $p = 0.3$, $n = 50$.}
+          \label{fig:bin_dist}
 	\end{center}
 \end{figure}
 
@@ -120,11 +121,11 @@ $$ X = \sum_{i = 1}^n Y_i ,$$
 
 Для демонстрации этого свойства в Python сгенерируем массив некоторого
  достаточного количества геометрических случаных величин. С помощью него
- построим гистограмму геометрического распределения (Рис.2 (a)). Зафиксируем некоторое $m$,
+ построим гистограмму геометрического распределения (Рис. \eqref{subfig:geometric_distribution}). Зафиксируем некоторое $m$,
  и построим гистаграмму распределения вектора геометрических случайных
  величин из первоначального набора, значения которых больше либо равны $m$.
  В результате увидим, что при достаточно большом количестве чисел в первоначальном
- наборе гистограммы двух распределений приблизительно совпадают (Рис.2 (b)). 
+ наборе гистограммы двух распределений приблизительно совпадают (Рис. \eqref{subfig:memoryless}). 
 
  \begin{figure}
      \centering
@@ -132,14 +133,14 @@ $$ X = \sum_{i = 1}^n Y_i ,$$
          \centering
          \includegraphics[width=\textwidth]{./resources/geometric.png}
          \caption{Гистограмма геометрического распределения при $p = 0.3$}
-         \label{fig:geometric_distribution}
+         \label{subfig:geometric_distribution}
      \end{subfigure}
      \hfill
      \begin{subfigure}[b]{0.45\textwidth}
          \centering
          \includegraphics[width=\textwidth]{./resources/comparison.png}
          \caption{Демонстрация свойства отсутствия памяти}
-         \label{fig:three sin x}
+         \label{subfig:memoryless}
      \end{subfigure}
      \caption{}
      \label{fig:geometric}
@@ -148,14 +149,14 @@ $$ X = \sum_{i = 1}^n Y_i ,$$
 \anonsubsection{Игра в орлянку}
 Рассмотрим игру в орлянку. Для этого смоделируем последовательность
  случайных величин $X_1, X_2, \dots,$ где
-\begin{equation}
+$$
 	X_i = 
 	\begin{cases}
 	     1 \ , & p = \frac{1}{2}\\
 	     -1 \ , & p = \frac{1}{2}
 	\end{cases}
      ,\quad i = 1,\dots,n.
-\end{equation}
+$$
 Тогда необходимая сумма представляется в виде:
 $$
 Y(i) = \dfrac{X_1 + \dots + X_i}{\sqrt n}, \quad
