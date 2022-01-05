@@ -1,0 +1,175 @@
+\anonsection{Задание 6}
+\anonsubsection{Формулировка задания}
+\begin{enumerate}
+	\item Посчитать интеграл
+	\begin{equation*}\label{integral}
+	\int\limits_{-\infty}^{\infty} \int\limits_{-\infty}^\infty \cdots
+     \int\limits_{-\infty}^\infty \frac{e^{-\left(x_1^2 + \ldots + x_{10}^2
+     + \frac{1}{ 2^7\cdot x_1^2 \cdot \ldots \cdot x_{10}^2}\right)}}{x_1^2
+     \cdot \ldots \cdot x_{10}^2}dx_1\ldots dx_{10}
+	\end{equation*}
+	\begin{itemize}
+		\item[---] методом Монте-Карло
+		\item[---] методом квадратур, сводя задачу к вычислению собственного
+         интеграла Римана
+	\end{itemize}
+	\item Для каждого случая оценить точность вычислений.
+\end{enumerate}
+
+\anonsubsection{Метод Монте-Карло}
+Перепишем интеграл
+$$
+\int\limits_{-\infty}^{\infty} \int\limits_{-\infty}^\infty \cdots
+ \int\limits_{-\infty}^\infty \frac{e^{-\left(x_1^2 + \ldots + x_{10}^2 +
+ \frac{1}{ 2^7\cdot x_1^2 \cdot \ldots \cdot x_{10}^2}\right)}}{x_1^2 \cdot
+ \ldots \cdot x_{10}^2}dx_1\ldots dx_{10}
+$$
+в виде
+$$
+\int\limits_{-\infty}^{\infty} \int\limits_{-\infty}^{\infty} \ldots
+ \int\limits_{-\infty}^{\infty} f(x_1,\ldots,x_{10})g(x_1,\ldots,x_{10}) dx_1
+ \ldots\cdot dx_{10},
+$$
+где
+$$
+f(x) = \sqrt{\pi^{10}}\cdot \dfrac{e^{-\frac{1}{2^7\cdot x_1^2 \cdot \ldots
+ \cdot x_{10}^2}}}{x_1^2\cdot \ldots \cdot x_{10}^2},\quad g(x) = \dfrac{1}
+ {\sqrt{\pi^{10}}}\cdot e^{-(x_1^2+\ldots +x_{10}^2)}.
+$$
+Заметим, что $ g(x) $ является совместной плотностью распределения набора
+ независимых случайных величин, имеющих нормальное распределение с параметрами
+ $0$ и $\dfrac{1}{2}$:
+$$
+x=(x_1,\ldots,x_{10}),\quad x_i\sim\mathcal{N}\left(0,\dfrac{1}{2}\right).
+$$
+Тогда интеграл \eqref{integral} можно записать в виде:
+$$
+I = \mathbb{E} f(x_1,\ldots,x_{10}),\quad x_i\sim\mathcal{N}\left(0, 
+ \dfrac{1}{2}\right).
+$$
+Рассмотрим выборку
+$$
+x^i = (x_1^i, \ldots, x_{10}^i),\quad x_k^i\sim\mathcal{N}\left(0,\dfrac{1}{2}
+ \right),\quad k = \overline{1,10}, \quad i = \overline{1,n}.
+$$
+Согласно ЗБЧ выборочное среднее будет стремиться к математическому ожиданию,
+ то есть:
+$$
+\bar{f} = \dfrac{S_n}{n} = \dfrac{1}{n} \sum_{i = 1}^n f(x^i) \xrightarrow
+ [n\to\infty]{}I.
+$$
+Оценим погрешность метода Монте--Карло с помощью центральной предельной теоремы:
+\begin{multline}\label{mc_err_estimation}
+\mathbb{P} \left( \left| \dfrac{S_n}{n} - I \right| < \varepsilon \right) =
+ \mathbb{P} \left( \left| \dfrac{S_n - nI}{n} \right| <\varepsilon \right) =
+ \mathbb{P}\left(\left|\dfrac{S_n-nI}{\sigma\sqrt{n}}\right|<\dfrac{\sqrt{n}}
+ {\sigma}\varepsilon\right) =\\
+ = \mathbb{P}\left(-\dfrac{\sqrt{n}}{\sigma}\varepsilon<\dfrac{S_n-nI}
+ {\sigma\sqrt{n}}<\dfrac{\sqrt{n}}{\sigma}\varepsilon\right) = \Phi_0 
+ \left( \dfrac{\sqrt{n}}{\sigma}\varepsilon\right)-\Phi_0 \left( -\dfrac{\sqrt{n}}
+ {\sigma} \varepsilon \right) =\\
+ = \Phi_0 \left( \dfrac{\sqrt{n}}{\sigma} \varepsilon \right) - \left( 1 -
+ \Phi_0 \left( \dfrac{\sqrt{n}}{\sigma} \varepsilon \right) \right) =
+ 2\Phi_0 \left( \dfrac{\sqrt{n}}{\sigma} \varepsilon \right)  - 1 = 2 \Phi_0(x_p) -
+ 1 = 1 - \alpha,
+\end{multline}
+где
+\begin{itemize}
+	\item $\Phi_0(x)$ --- функция Лапласа или функция ошибок:
+	$$
+	\Phi(x) = \dfrac{1}{\sqrt{2\pi}} \int\limits_{-\infty}^x e^{-\frac{t^2}{2}}dt,
+	$$
+	\item $x_p = \dfrac{\sqrt{n}}{\sigma} \varepsilon $ --- квантиль уровня
+     $ p $. Из \eqref{mc_err_estimation} видно, что в данном случае 
+     $ p = 1 - \frac{\alpha}{2} $
+	\item $ \alpha $ --- уровень значимости.
+\end{itemize}
+Погрешность $ \varepsilon $ для соответствующего уровня значимости $ \alpha = 2 - 
+ 2\Phi_0(x_p)$ связана с $ x_p $ соотношением:
+$$
+\varepsilon = \dfrac{\sigma x_p}{\sqrt{n}}.
+$$
+Значение $ \sigma > 0 $ используем как значение выборочной дисперсии:
+$$
+\sigma = \frac{1}{n} \sum_{i = 1}^n f^2(x_i) - \left( \frac{1}{n}
+ \sum_{i = 1}^n f(x_i) \right)^2.
+$$
+В качестве уровня значимости возьмем $ \alpha = 0.05 $:
+$$
+\mathbb{P} \left( \left| \dfrac{S_n}{n} - I \right| < \varepsilon \right) =
+ 1 - \alpha = 0.95.
+$$
+Ниже приведена таблица зависимости вычисленных значений интеграла и полученной
+ погрешности при разном количестве испытаний:
+\begin{center}
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		Число испытаний & Результат & Погрешность&Время работы\\\hline
+		$10^2$&107.6762&79.4061&0.0005\\\hline
+		$10^3$&139.7728&31.0156&0.00474\\\hline
+		$10^4$&108.3251&19.266&0.0078\\\hline
+		$10^5$&123.9544&6.9206&0.0956\\\hline
+		$10^6$&124.5817&2.3284&0.3685 \\\hline
+		$10^7$&124.78&0.7101& 3.0683\\\hline
+		$10^8$&124.7298&0.2214&16.911\\\hline
+		$10^9$&124.789&0.071& 186.962\\\hline
+		$10^10$&124.8231&0.0221& 1436.962\\\hline
+	\end{tabular}
+\end{center}
+
+\anonsubsection{Метод квадратур}
+Сведем задачу к вычислению собственного интеграла Римана. Для этого сделаем
+ следующую замену переменных:
+$$
+x_i = \tg \left( \frac{\pi}{2} t_i \right), t_i \in [0; 1].
+$$
+Таким образом, по методу прямоугольников исходный интеграл приблизится значением:
+$$
+I = \left( \dfrac{\pi}{2} \right)^{10} \int\limits_{-1}^{1} \ldots
+ \int\limits_{-1}^{1} \dfrac{\exp \left\lbrace - \left( \sum\limits_{k = 1}^{10}
+ \tg \left( \dfrac{\pi}{2} t_k \right)^2 + \dfrac{1}{2^7 \cdot
+ \prod\limits_{k = 1}^{10} \tg \left( \dfrac{\pi}{2} t_k \right)^2} \right)
+ \right\rbrace}{\prod\limits_{k = 1}^{10} \tg \left( \dfrac{\pi}{2} t_k \right)^2
+ \cdot\prod\limits_{k = 1}^{10} \cos \left( \dfrac{\pi}{2} t_k \right)^2} dt_1 
+ \ldots dt_{10}.
+$$
+
+Проведём равномерное разбиение отрезка \( [-1,1] \) на \( N \) частей:
+\[
+-1 = t_0 < t_1 < \ldots < t_N = 1,\quad t_i = -1 + i \cdot \dfrac{1-(-1)}{N} =
+ i \cdot \dfrac{2}{N} - 1.
+\]
+
+Обозначим через \( f(t_1, \ldots, t_{10}) \) подынтегральную функцию интеграла
+ \( I \). Будем использовать метод средних прямоугольников. Для этого нам
+ необходимо выбрать середины нашего разбиения:
+\[
+y_i = \dfrac{t_i + t_{i - 1}}{2},\quad i = \overline{1,N}.
+\]
+
+Тогда наш интеграл приближённо можно посчитать следующим образом:
+\[
+I_N = \left( \dfrac{\pi}{N} \right)^{10} \sum\limits_{i_1 = 1}^N \ldots
+ \sum\limits_{i_{10} = 1}^N f(y_{i_1}, \ldots, y_{i_{10}}).
+\]
+
+
+Оценка погрешности метода прямоугольников на равномерной сетке имеет следующий
+ вид: 
+$$
+\varepsilon = \dfrac{h^2}{24} (b - a) \sum\limits_{i,j = 1}^{10} \max \left|
+ f''_{x_i, x_j} \right| = \dfrac{1}{6N^2} \sum\limits_{i,j = 1}^{10} \max 
+ \left|f''_{x_i,x_j} \right|.
+$$
+Приведем таблицу зависимости результата от количества точек разбиения отрезка:
+\begin{center}
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		N & Результат & Время работы\\\hline
+		3&0.086797&0.114195\\\hline
+		4&272.6029&0.363554\\\hline
+		5&183.4886&4.940286\\\hline
+		6&116.3903&45.398591\\\hline
+		7&120.6386&283.993222\\\hline
+	\end{tabular}
+\end{center}
